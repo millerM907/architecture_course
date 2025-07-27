@@ -1,7 +1,8 @@
-package org.millerM907;
+package org.millerM907.hw01_tdd_methodology.quadratic_solver;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.millerM907.hw01_tdd_methodology.quadratic_solver.QuadraticEquationSolver;
 
 import static org.junit.jupiter.api.Assertions.*;
 

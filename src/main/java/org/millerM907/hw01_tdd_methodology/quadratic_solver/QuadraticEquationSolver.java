@@ -1,4 +1,4 @@
-package org.millerM907;
+package org.millerM907.hw01_tdd_methodology.quadratic_solver;
 
 public class QuadraticEquationSolver {
 
