@@ -1,8 +1,6 @@
 package org.millerM907.hw06_generation_adapters_by_interface;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.millerM907.hw02_stable_abstractions.space_battle.ConfigurableObject;
 import org.millerM907.hw02_stable_abstractions.space_battle.core.Vector;
 import org.millerM907.hw05_ioc_container.base.Command;
@@ -69,4 +67,38 @@ public class DynamicGenerationAdapterByIoCTest {
         Vector vel = adapter.getVelocity();
         assertEquals(new Vector(3, 4), vel);
     }
+
+    @AfterEach
+    void tearDown() {
+        resetIoCCompletely();
+    }
+
+    private static void resetIoCCompletely() {
+        IoC.setResolveStrategy((dep, args) -> {
+            throw new IllegalStateException("IoC is not initialized");
+        });
+
+        try {
+            // 2) InitCommand.alreadyInitialized = false
+            var fInit = InitCommand.class.getDeclaredField("alreadyInitialized");
+            fInit.setAccessible(true);
+            fInit.set(null, false);
+
+            //clean rootScope
+            var fRoot = InitCommand.class.getDeclaredField("rootScope");
+            fRoot.setAccessible(true);
+            @SuppressWarnings("unchecked")
+            var root = (java.util.concurrent.ConcurrentHashMap<String, java.util.function.Function<Object[], Object>>) fRoot.get(null);
+            root.clear();
+
+            // clean ThreadLocal current scope
+            var fTL = InitCommand.class.getDeclaredField("currentScopes");
+            fTL.setAccessible(true);
+            ThreadLocal<?> tl = (ThreadLocal<?>) fTL.get(null);
+            tl.remove();
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException("Failed to reset IoC", e);
+        }
+    }
+
 }
