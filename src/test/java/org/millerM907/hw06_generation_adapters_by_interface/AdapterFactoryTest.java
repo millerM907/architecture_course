@@ -1,5 +1,6 @@
 package org.millerM907.hw06_generation_adapters_by_interface;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -80,5 +81,12 @@ public class AdapterFactoryTest {
     void givenNonInterface_whenCreateAdapter_thenThrowsException() {
         assertThrows(IllegalArgumentException.class,
                 () -> AdapterFactory.createAdapter(Vector.class, obj));
+    }
+
+    @AfterEach
+    void tearDown() {
+        IoC.setResolveStrategy((dep, args) -> {
+            throw new IllegalStateException("IoC is not initialized");
+        });
     }
 }
